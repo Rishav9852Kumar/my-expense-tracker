@@ -1,7 +1,8 @@
 # Getting Started with Create React App
 [![Netlify Status](https://api.netlify.com/api/v1/badges/d0e06a39-d5d8-4353-83d2-c4178a42bbc6/deploy-status)](https://app.netlify.com/sites/benevolent-profiterole-749f09/deploys)
 
-###Live Link : - [Live App](https://my-expenses-tracker-app.netlify.app/).
+##Live Link : - [Live App](https://my-expenses-tracker-app.netlify.app/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
