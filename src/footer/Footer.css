@@ -3,18 +3,22 @@
   background-color: #333;
   color: #fff;
   padding: 20px;
+  /* position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0; */
 }
 
 .footer-links ul {
   list-style: none;
   padding: 0;
   display: flex;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
 }
 
 .footer-links li {
   margin-right: 20px;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
 .footer-links a {
@@ -35,7 +39,7 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .footer-links li {
     margin-bottom: 10px;
   }
