@@ -15,10 +15,10 @@ const HomePage = () => {
   const [expenses, setExpenses] = useState([]);
   const [chosenCategory, setChosenCategory] = useState("Food"); // Default category
   const [expenseInput, setExpenseInput] = useState({
-    expense_title: "",
+    expense_title: "pizza",
     expense_category: "",
-    expense_amount: "",
-    expense_desc: "",
+    expense_amount: "123",
+    expense_desc: "bought pizza",
     star_marked: false,
     userId: 1, // Assuming userId as 1 for now
   });
