@@ -51,13 +51,11 @@ const HomePage = () => {
 
   const addExpense = async () => {
     try {
-      await axios.post(
-        "https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event",
-        expenseInput
-      );
-      console.log("expenseInput = " + expenseInput);
+      const expenseUrl = `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?expense_title=${expenseInput.expense_title}&expense_category=${chosenCategory}&expense_amount=${expenseInput.expense_amount}&expense_desc=${expenseInput.expense_desc}&star_marked=${expenseInput.star_marked}&userId=${expenseInput.userId}`;
+
+      await axios.post(expenseUrl);
+
       toast.success("Expense entry was added successfully!");
-      //fetchExpenses();
     } catch (err) {
       toast.error("Failed to add expense entry. Please check your inputs");
     }
