@@ -27,8 +27,8 @@ const HomePage = () => {
     Food: "success",
     Recharge: "secondary", // Gray
     Travel: "primary", // Blue
-    Transfers: "warning", // Yellow
-    Lending : "info",
+    Fun: "warning", // Yellow
+    Lending: "info",
     Miscellaneous: "danger", // Red
   };
 
@@ -80,7 +80,7 @@ const HomePage = () => {
 
   return (
     <Container className="admin-container my-5">
-      <h1 className="admin-heading">Expenses</h1>
+      <h1 className="admin-heading custom-home-heading">Expenses</h1>
       <Row>
         <Col xs={12} md={6} className="mb-4">
           <Card>

@@ -14,13 +14,13 @@ const Footer = () => {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/about">About</Link>
-              </li>
-              <li>
                 <Link to="/tasks">Tasks</Link>
               </li>
               <li>
                 <Link to="/user/admin">Admin</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
               </li>
               <li>
                 <Link to="/user">User</Link>
@@ -28,7 +28,7 @@ const Footer = () => {
             </ul>
           </Col>
           <Col sm={6} className="footer-text">
-            &copy; 2023 Language Learning Game (LLG). All rights reserved.
+            &copy; 2024 Expense and Task Tracker (RETT). All rights reserved.
           </Col>
         </Row>
       </Container>

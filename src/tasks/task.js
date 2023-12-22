@@ -12,88 +12,109 @@ import {
 import { toast } from "react-toastify";
 import "./Tasks.css";
 const Tasks = () => {
-  const [expenses, setExpenses] = useState([]);
-  const [chosenCategory, setChosenCategory] = useState("Food"); // Default category
-  const [expenseInput, setExpenseInput] = useState({
-    expense_title: "",
-    expense_category: "",
-    expense_amount: "",
-    expense_desc: "",
-    star_marked: false,
-    userId: 1, // Assuming userId as 1 for now
+  const [tasks, setTasks] = useState([]);
+  const [chosenCategory, setChosenCategory] = useState("Notes"); // Default category
+
+  let current_datetime = new Date();
+  let formatted_date = current_datetime
+    .toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+    .split(",");
+
+  // We will now format the date and time in suitable format to be used in datetime-local HTML attribute
+  let date = formatted_date[0].split("/");
+  date =
+    date[2] + "-" + ("0" + date[0]).slice(-2) + "-" + ("0" + date[1]).slice(-2); // YYYY-MM-DD format
+
+  let time = formatted_date[1].trim(); // trim is used to remove leading white spaces
+  time = time.substring(0, time.lastIndexOf(":")); // Removing the seconds from the time
+
+  // Setting the initial state of taskInput
+  const [taskInput, setTaskInput] = useState({
+    task_title: "",
+    task_category: "",
+    task_priority: "",
+    task_date: date + "T" + time, // Setting current IST date and time
+    task_details: "",
+    userId: 1, // Assuming userId as 1 now
   });
 
   const categoryColors = {
-    Food: "success",
-    Recharge: "secondary", // Gray
-    Travel: "primary", // Blue
-    Transfers: "warning", // Yellow
-    Lending: "info",
-    Miscellaneous: "danger", // Red
+    "Work Task": "success", // Green
+    "Study Task": "primary", // Gray
+    Goals: "secondary", // Blue
+    Reminder: "warning", // Yellow
+    Important: "danger",
+    Notes: "info", // Red
   };
 
-  const fetchExpenses = async () => {
+  const fetchTasks = async () => {
     try {
       const response = await axios.get(
-        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${1}&count=${6}`
+        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?userId=${1}&count=${100}`
       );
-      setExpenses(response.data);
+      setTasks(response.data);
     } catch (err) {
       console.log(err);
     }
   };
 
   const handleInputChange = (event) => {
-    setExpenseInput({
-      ...expenseInput,
+    setTaskInput({
+      ...taskInput,
       [event.target.name]: event.target.value,
     });
   };
 
-  const addExpense = async () => {
-    const { expense_title, expense_amount } = expenseInput;
+  const addTask = async () => {
+    const { task_title, task_priority, task_date, task_category } = taskInput;
 
-    if (!expense_title || !expense_amount) {
-      toast.error("Title and Amount are mandatory. Please check your inputs");
+    if (!task_title || !task_priority || !task_date || !task_category) {
+      toast.error(
+        "Title, Priority, Date, and Category are mandatory. Please check your inputs"
+      );
       return;
     }
     try {
-      const expenseUrl = `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?expense_title=${expenseInput.expense_title}&expense_category=${chosenCategory}&expense_amount=${expenseInput.expense_amount}&expense_desc=${expenseInput.expense_desc}&star_marked=${expenseInput.star_marked}&userId=${expenseInput.userId}`;
+      const taskUrl = `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?task_title=${taskInput.task_title}&task_category=${chosenCategory}&task_priority=${taskInput.task_priority}&task_date=${taskInput.task_date}&task_details=${taskInput.task_details}&userId=${taskInput.userId}`;
 
-      await axios.post(expenseUrl);
-      fetchExpenses();
-      toast.success("Expense entry was added successfully!");
+      await axios.post(taskUrl);
+      fetchTasks();
+      toast.success("Task entry was added successfully!");
     } catch (err) {
-      toast.error("Failed to add expense entry. Please check your inputs");
+      toast.error("Failed to add task entry. Please check your inputs");
     }
   };
+
   const handleChangeCategory = (newCategory) => {
-    setExpenseInput({
-      ...expenseInput,
-      expense_category: newCategory,
+    setTaskInput({
+      ...taskInput,
+      task_category: newCategory,
     });
     setChosenCategory(newCategory);
   };
+
   useEffect(() => {
-    fetchExpenses();
+    fetchTasks();
   }, []);
 
   return (
     <Container className="admin-container my-5">
-      <h1 className="admin-heading">Expenses</h1>
+      <h1 className="admin-heading custom-heading">Tasks And TO-DO'S</h1>
       <Row>
         <Col xs={12} md={6} className="mb-4">
           <Card>
             <Card.Body>
-              <Card.Title>Add New Expense</Card.Title>
+              <Card.Title className="custom-card-title">
+                Add New Task
+              </Card.Title>
               <Form>
                 <Form.Group controlId="title">
                   <Form.Label>Title</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Enter Title"
-                    name="expense_title"
-                    value={expenseInput.expense_title}
+                    name="task_title"
+                    value={taskInput.task_title}
                     onChange={handleInputChange}
                   />
                 </Form.Group>
@@ -118,32 +139,42 @@ const Tasks = () => {
                   </Dropdown>
                 </Form.Group>
 
-                <Form.Group controlId="amount">
-                  <Form.Label>Amount</Form.Label>
+                <Form.Group controlId="priority">
+                  <Form.Label>Task Priority</Form.Label>
                   <Form.Control
                     type="number"
-                    placeholder="Enter Amount"
-                    name="expense_amount"
-                    value={expenseInput.expense_amount}
+                    min="1"
+                    max="10"
+                    placeholder="Enter Priority from 1 to 10"
+                    name="task_priority"
+                    value={taskInput.task_priority}
                     onChange={handleInputChange}
                   />
                 </Form.Group>
-
+                <Form.Group controlId="date">
+                  <Form.Label>Task Date</Form.Label>
+                  <Form.Control
+                    type="datetime-local"
+                    name="task_date"
+                    value={taskInput.task_date}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
                 <Form.Group controlId="description">
-                  <Form.Label>Expense Description</Form.Label>
+                  <Form.Label>Task Description</Form.Label>
                   <Form.Control
                     as="textarea"
                     rows={3}
                     placeholder="Enter Description"
-                    name="expense_desc"
-                    value={expenseInput.expense_desc}
+                    name="task_desc"
+                    value={taskInput.task}
                     onChange={handleInputChange}
                   />
                 </Form.Group>
                 <div className="button-wrap">
                   <Button
                     variant="primary"
-                    onClick={addExpense}
+                    onClick={addTask}
                     className="full-width"
                   >
                     Submit
@@ -155,33 +186,32 @@ const Tasks = () => {
         </Col>
 
         <Col xs={12} md={6}>
-          <h3>Recent Expenses</h3>
+          <h3>Recent Added Tasks</h3>
           <Row xs={1} md={2}>
-            {expenses.map((expense, index) => (
+            {tasks.map((tasks, index) => (
               <Col xs={12} lg={6} key={index} className="mb-4">
                 <Card
-                  bg={categoryColors[expense.expense_category]}
+                  bg={categoryColors[tasks.task_category]}
                   text="white"
                   className="shadow-sm"
                 >
                   <Card.Body>
-                    <Card.Title>{expense.expense_title}</Card.Title>
+                    <Card.Title>{tasks.task_title}</Card.Title>
                     <Card.Subtitle className="mb-2 ">
-                      {expense.expense_category}
+                      {tasks.task_category}
                     </Card.Subtitle>
                     <Card.Text>
                       <br />
-                      <strong>Expense Id:</strong> {expense.expense_id}
+                      <strong>Task Id:</strong> {tasks.task_Id}
                       <br />
                       <br />
-                      <strong>Created on :</strong>{" "}
-                      {expense.expense_creation_date}
+                      <strong>Created on :</strong> {tasks.task_creation_date}
                       <br />
-                      <strong>Description:</strong> {expense.expense_desc}
+                      <strong>Description:</strong> {tasks.task_desc}
                       <br />
-                      <strong>Amount:</strong> {expense.expense_amount}
+                      <strong>Priority:</strong> {tasks.task_priority}
                       <br />
-                      <strong>User ID:</strong> {expense.userId}
+                      <strong>User ID:</strong> {tasks.userId}
                       <br />
                     </Card.Text>
                   </Card.Body>
