@@ -223,21 +223,19 @@ const Tasks = () => {
                   <Card.Body>
                     <Card.Title>{tasks.task_title}</Card.Title>
                     <Card.Subtitle className="mb-2 ">
-                      {tasks.task_category}
+                      Category : {tasks.task_category}
                     </Card.Subtitle>
                     <Card.Text>
+                      <strong>Task Date :</strong> {tasks.task_date}
                       <br />
-                      <strong>Task Id:</strong> {tasks.task_Id}
+                      <strong>Task Priority :</strong> {tasks.task_priority}
+                      <br />
+                      <strong>Description:</strong> {tasks.task_desc}
                       <br />
                       <br />
                       <strong>Created on :</strong> {tasks.task_creation_date}
                       <br />
-                      <strong>Description:</strong> {tasks.task_desc}
-                      <br />
-                      <strong>Priority:</strong> {tasks.task_priority}
-                      <br />
-                      <strong>User ID:</strong> {tasks.userId}
-                      <br />
+                      <strong>Task Id:</strong> {tasks.task_id}
                     </Card.Text>
                   </Card.Body>
                 </Card>
