@@ -67,7 +67,12 @@ const Tasks = () => {
 
   const addTask = async () => {
     const { task_title, task_priority, task_date, task_category } = taskInput;
-
+    if (task_priority < 1 || task_priority > 10) {
+      toast.error(
+        "Priority must be between 1 and 10. Please check your inputs"
+      );
+      return;
+    }
     if (!task_title || !task_priority || !task_date || !task_category) {
       toast.error(
         "Title, Priority, Date, and Category are mandatory. Please check your inputs"
