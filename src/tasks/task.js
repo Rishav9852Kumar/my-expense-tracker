@@ -69,15 +69,15 @@ const Tasks = () => {
     setSearch(e.target.value);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
-  // use this when you want dynamic search effect
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
   // useEffect(() => {
   //   fetchTasks();
-  // }, [fetchTasks]);
+  // }, []);
+
+  // use this when you want dynamic search effect
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks]);
 
   const addTask = async () => {
     const { task_title, task_priority, task_date, task_category } = taskInput;
