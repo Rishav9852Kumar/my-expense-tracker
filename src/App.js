@@ -24,6 +24,7 @@ import Footer from "./footer/footer.js";
 import Header from "./header/header.js";
 import User from "./account/user.js";
 import AboutPage from "./utils/AboutPage.js";
+import Tasks from "./tasks/task.js";
 
 function App() {
    const [user, setUser] = useState(null);
@@ -47,6 +48,7 @@ function App() {
                  <Route exact path="/signin" element={<SignIn />} />
                  <Route exact path="/signup" element={<SignUp />} />
                  <Route exact path="/user" element={<User />} />
+                 <Route exact path="/tasks" element={<Tasks/>}/>
                  <Route exact path="/about" element={<AboutPage />} />
                  <Route exact path="*" element={<PageNotFound />} />
                </Routes>
