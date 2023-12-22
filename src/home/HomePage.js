@@ -15,10 +15,10 @@ const HomePage = () => {
   const [expenses, setExpenses] = useState([]);
   const [chosenCategory, setChosenCategory] = useState("Food"); // Default category
   const [expenseInput, setExpenseInput] = useState({
-    expense_title: "pizza",
+    expense_title: "",
     expense_category: "",
-    expense_amount: "123",
-    expense_desc: "bought pizza",
+    expense_amount: "",
+    expense_desc: "",
     star_marked: false,
     userId: 1, // Assuming userId as 1 for now
   });
@@ -28,13 +28,14 @@ const HomePage = () => {
     Recharge: "secondary", // Gray
     Travel: "primary", // Blue
     Transfers: "warning", // Yellow
+    Lending : "info",
     Miscellaneous: "danger", // Red
   };
 
   const fetchExpenses = async () => {
     try {
       const response = await axios.get(
-        "https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/events"
+        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${1}&count=${6}`
       );
       setExpenses(response.data);
     } catch (err) {
@@ -50,11 +51,17 @@ const HomePage = () => {
   };
 
   const addExpense = async () => {
+    const { expense_title, expense_amount } = expenseInput;
+
+    if (!expense_title || !expense_amount) {
+      toast.error("Title and Amount are mandatory. Please check your inputs");
+      return;
+    }
     try {
       const expenseUrl = `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?expense_title=${expenseInput.expense_title}&expense_category=${chosenCategory}&expense_amount=${expenseInput.expense_amount}&expense_desc=${expenseInput.expense_desc}&star_marked=${expenseInput.star_marked}&userId=${expenseInput.userId}`;
 
       await axios.post(expenseUrl);
-
+      fetchExpenses();
       toast.success("Expense entry was added successfully!");
     } catch (err) {
       toast.error("Failed to add expense entry. Please check your inputs");
@@ -159,7 +166,7 @@ const HomePage = () => {
                 >
                   <Card.Body>
                     <Card.Title>{expense.expense_title}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
+                    <Card.Subtitle className="mb-2 ">
                       {expense.expense_category}
                     </Card.Subtitle>
                     <Card.Text>
