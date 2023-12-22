@@ -36,7 +36,7 @@ const Header = () => {
     >
       <NavbarBrand>
         <Link to="/" className="text-white">
-          Language Learning Game
+          Expense and Task Tracker
         </Link>
       </NavbarBrand>
 

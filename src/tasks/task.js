@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { MdDeleteForever } from "react-icons/md";
+
 import {
   Container,
   Row,
@@ -9,12 +11,29 @@ import {
   Form,
   Dropdown,
 } from "react-bootstrap";
+
 import { toast } from "react-toastify";
 import "./Tasks.css";
+import DeleteTaskModal from "../components/DeleteTaskModal.js";
+
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   const [search, setSearch] = useState("");
   const [chosenCategory, setChosenCategory] = useState("Notes"); // Default category
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [taskBeingDeleted, setTaskBeingDeleted] = useState(null);
+
+  const handleDeletePopup = (task) => {
+    setTaskBeingDeleted(task);
+    setShowDeleteModal(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setTaskBeingDeleted(null);
+    setShowDeleteModal(false);
+    fetchTasks(); // Fetch the tasks again after deletion
+  };
 
   let current_datetime = new Date();
   let formatted_date = current_datetime
@@ -69,15 +88,15 @@ const Tasks = () => {
     setSearch(e.target.value);
   };
 
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // useEffect(() => {
-  //   fetchTasks();
-  // }, []);
-
-  // use this when you want dynamic search effect
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchTasks();
-  }, [fetchTasks]);
+  }, []);
+
+  // use this when you want dynamic search effect
+  // useEffect(() => {
+  //   fetchTasks();
+  // }, [fetchTasks]);
 
   const addTask = async () => {
     const { task_title, task_priority, task_date, task_category } = taskInput;
@@ -237,11 +256,24 @@ const Tasks = () => {
                       <br />
                       <strong>Task Id:</strong> {tasks.task_id}
                     </Card.Text>
+                    <br />
+                    <div className="delete-icon">
+                      <MdDeleteForever
+                        onClick={() => handleDeletePopup(tasks)}
+                      />
+                    </div>
                   </Card.Body>
                 </Card>
               </Col>
             ))}
           </Row>
+          {showDeleteModal && (
+            <DeleteTaskModal
+              show={showDeleteModal}
+              handleClose={handleCloseDeleteModal}
+              task={taskBeingDeleted}
+            />
+          )}
         </Col>
       </Row>
     </Container>
