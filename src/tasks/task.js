@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import {
   Container,
@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import "./Tasks.css";
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
+  const [search, setSearch] = useState("");
   const [chosenCategory, setChosenCategory] = useState("Notes"); // Default category
 
   let current_datetime = new Date();
@@ -47,16 +48,16 @@ const Tasks = () => {
     Notes: "info", // Red
   };
 
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     try {
       const response = await axios.get(
-        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?userId=${2}&count=${6}`
+        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?userId=${2}&search_str=${search}&count=${6}`
       );
       setTasks(response.data);
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [search]);
 
   const handleInputChange = (event) => {
     setTaskInput({
@@ -64,6 +65,19 @@ const Tasks = () => {
       [event.target.name]: event.target.value,
     });
   };
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  // use this when you want dynamic search effect
+  // useEffect(() => {
+  //   fetchTasks();
+  // }, [fetchTasks]);
 
   const addTask = async () => {
     const { task_title, task_priority, task_date, task_category } = taskInput;
@@ -97,10 +111,6 @@ const Tasks = () => {
     });
     setChosenCategory(newCategory);
   };
-
-  useEffect(() => {
-    fetchTasks();
-  }, []);
 
   return (
     <Container className="admin-container my-5">
@@ -191,7 +201,17 @@ const Tasks = () => {
         </Col>
 
         <Col xs={12} md={6}>
-          <h3>Recent Added Tasks</h3>
+          <h3>Your Added Tasks</h3>
+
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search Here"
+              aria-label="Search Here"
+              onChange={handleSearchChange}
+            />
+            <button onClick={fetchTasks}>Search</button>
+          </div>
           <Row xs={1} md={2}>
             {tasks.map((tasks, index) => (
               <Col xs={12} lg={6} key={index} className="mb-4">
