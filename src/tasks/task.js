@@ -34,8 +34,8 @@ const Tasks = () => {
     task_category: "",
     task_priority: "",
     task_date: date + "T" + time, // Setting current IST date and time
-    task_details: "",
-    userId: 1, // Assuming userId as 1 now
+    task_desc: "",
+    userId: 2, // Assuming userId as 1 now
   });
 
   const categoryColors = {
@@ -50,7 +50,7 @@ const Tasks = () => {
   const fetchTasks = async () => {
     try {
       const response = await axios.get(
-        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?userId=${1}&count=${100}`
+        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?userId=${2}&count=${6}`
       );
       setTasks(response.data);
     } catch (err) {
@@ -80,7 +80,7 @@ const Tasks = () => {
       return;
     }
     try {
-      const taskUrl = `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?task_title=${taskInput.task_title}&task_category=${chosenCategory}&task_priority=${taskInput.task_priority}&task_date=${taskInput.task_date}&task_details=${taskInput.task_details}&userId=${taskInput.userId}`;
+      const taskUrl = `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?task_title=${taskInput.task_title}&task_category=${chosenCategory}&task_priority=${taskInput.task_priority}&task_date=${taskInput.task_date}&task_desc=${taskInput.task_desc}&userId=${taskInput.userId}`;
 
       await axios.post(taskUrl);
       fetchTasks();
@@ -172,7 +172,7 @@ const Tasks = () => {
                     rows={3}
                     placeholder="Enter Description"
                     name="task_desc"
-                    value={taskInput.task}
+                    value={taskInput.task_desc}
                     onChange={handleInputChange}
                   />
                 </Form.Group>
