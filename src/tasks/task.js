@@ -71,8 +71,8 @@ const Tasks = () => {
     Goals: "info", // Grey
     Reminder: "warning", // Yellow
     Important: "danger", // Red
-    Notes: "Dark", // Dark
-    Missilinious: "Dark", // Dark
+    Notes: "dark", // Dark
+    Missilinious: "dark", // Dark
   };
 
   const fetchTasks = useCallback(async () => {
