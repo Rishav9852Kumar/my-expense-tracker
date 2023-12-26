@@ -66,12 +66,12 @@ const Tasks = () => {
     userId: 2, // Assuming userId as 2 now
   };
   const categoryColors = {
-    "Work Task": "secondary", // Grey
-    "Study Task": "success", // Green
-    Goal: "info", // Grey
+    Work: "secondary", // Grey
+    Study: "success", // Green
+    Goal: "dark", // Grey
     Reminder: "warning", // Yellow
     Important: "danger", // Red
-    Note: "dark", // Dark
+    Note: "info", // Dark
     Missilinious: "dark", // Dark
   };
 

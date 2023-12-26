@@ -43,7 +43,7 @@ const HomePage = () => {
   const fetchExpenses = async () => {
     try {
       const response = await axios.get(
-        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${1}&count=${6}`
+        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${1}&count=${100}`
       );
       setExpenses(response.data);
     } catch (err) {
