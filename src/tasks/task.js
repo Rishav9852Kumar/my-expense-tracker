@@ -68,10 +68,10 @@ const Tasks = () => {
   const categoryColors = {
     "Work Task": "secondary", // Grey
     "Study Task": "success", // Green
-    Goals: "info", // Grey
+    Goal: "info", // Grey
     Reminder: "warning", // Yellow
     Important: "danger", // Red
-    Notes: "dark", // Dark
+    Note: "dark", // Dark
     Missilinious: "dark", // Dark
   };
 
