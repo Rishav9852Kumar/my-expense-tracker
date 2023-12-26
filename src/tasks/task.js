@@ -57,14 +57,22 @@ const Tasks = () => {
     task_desc: "",
     userId: 2, // Assuming userId as 1 now
   });
-
+  const initialTaskInput = {
+    task_title: "",
+    task_category: "",
+    task_priority: "",
+    task_date: date + "T" + time, // Setting current IST date and time
+    task_desc: "",
+    userId: 2, // Assuming userId as 2 now
+  };
   const categoryColors = {
-    "Work Task": "success", // Green
-    "Study Task": "primary", // Gray
-    Goals: "secondary", // Blue
+    "Work Task": "secondary", // Grey
+    "Study Task": "success", // Green
+    Goals: "info", // Grey
     Reminder: "warning", // Yellow
-    Important: "danger",
-    Notes: "info", // Red
+    Important: "danger", // Red
+    Notes: "Dark", // Dark
+    Missilinious: "Dark", // Dark
   };
 
   const fetchTasks = useCallback(async () => {
@@ -118,6 +126,7 @@ const Tasks = () => {
       await axios.post(taskUrl);
       fetchTasks();
       toast.success("Task entry was added successfully!");
+      setTaskInput(initialTaskInput);
     } catch (err) {
       toast.error("Failed to add task entry. Please check your inputs");
     }

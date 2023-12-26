@@ -22,14 +22,22 @@ const HomePage = () => {
     star_marked: false,
     userId: 1, // Assuming userId as 1 for now
   });
-
+  const initialExpenseInput = {
+    expense_title: "",
+    expense_category: "",
+    expense_amount: "",
+    expense_desc: "",
+    star_marked: false,
+    userId: 1, // Assuming userId as 1 for now
+  };
   const categoryColors = {
-    Food: "success",
-    Recharge: "secondary", // Gray
+    "Fast Food": "danger",
+    Utilities: "success",
     Travel: "primary", // Blue
-    Fun: "warning", // Yellow
+    "Fixed Expenses": "warning", // Yellow
     Lending: "info",
-    Miscellaneous: "danger", // Red
+    Miscellaneous: "secondary", // Red
+    "Self Expenses": "dark",
   };
 
   const fetchExpenses = async () => {
@@ -63,6 +71,7 @@ const HomePage = () => {
       await axios.post(expenseUrl);
       fetchExpenses();
       toast.success("Expense entry was added successfully!");
+      setExpenseInput(initialExpenseInput);
     } catch (err) {
       toast.error("Failed to add expense entry. Please check your inputs");
     }
@@ -85,7 +94,9 @@ const HomePage = () => {
         <Col xs={12} md={6} className="mb-4">
           <Card>
             <Card.Body>
-              <Card.Title>Add New Expense</Card.Title>
+              <Card.Title className="custom-card-title">
+                Add New Expense
+              </Card.Title>
               <Form>
                 <Form.Group controlId="title">
                   <Form.Label>Title</Form.Label>
