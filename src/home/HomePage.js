@@ -182,7 +182,9 @@ const HomePage = () => {
                     </Card.Subtitle>
                     <Card.Text>
                       <br />
-                      <strong>Expense Id:</strong> {expense.expense_id}
+                      <b>
+                        <strong>Amount:</strong> ₹{expense.expense_amount}.00
+                      </b>
                       <br />
                       <br />
                       <strong>Created on :</strong>{" "}
@@ -190,7 +192,7 @@ const HomePage = () => {
                       <br />
                       <strong>Description:</strong> {expense.expense_desc}
                       <br />
-                      <strong>Amount:</strong> {expense.expense_amount}
+                      <strong>Expense Id:</strong> {expense.expense_id}
                       <br />
                       <strong>User ID:</strong> {expense.userId}
                       <br />
