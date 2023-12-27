@@ -4,7 +4,10 @@
   padding: 20px;
   overflow-x: auto; 
 }
-
+.display-4
+{
+  color: #c2d3e4;
+}
 .about-content {
   margin: 20px;
   padding: 20px;
@@ -55,7 +58,7 @@
 }
 
 .your-image {
-  max-width: 50%;
+  max-width: 30%;
   height: auto;
   margin: 20px auto; 
 }
