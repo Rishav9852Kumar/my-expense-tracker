@@ -32,8 +32,8 @@ const SignIn = () => {
   const context = useContext(UserContext);
   const appUserContext = useContext(AppUserContext);
 
-  const [email, setEmail] = useState("rishavkumaraug20005212@gmail.com");
-  const [password, setPassword] = useState("Rishav@123");
+  const [email, setEmail] = useState("guest@123.gmail.com");
+  const [password, setPassword] = useState("Guest@123");
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchUserDetails = async (email) => {
@@ -56,14 +56,14 @@ const SignIn = () => {
           email: email,
           name: userName,
           userId: userId,
-          registrationDate: registrationDate,
+          registrationDate: registrationDate
         });
 
         console.log(
           "user logged in ... " +
-            userDetails.UserName +
+            appUserContext.appUser.email +
             ", with user id = " +
-            userDetails.UserId
+            appUserContext.appUser.userId
         );
 
         setIsLoading(false);

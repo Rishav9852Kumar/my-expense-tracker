@@ -53,23 +53,23 @@ const Tasks = () => {
   let time = formatted_date[1].trim(); // trim is used to remove leading white spaces
   time = time.substring(0, time.lastIndexOf(":")); // Removing the seconds from the time
 
-  // Setting the initial state of taskInput
-  const [taskInput, setTaskInput] = useState({
-    task_title: "",
-    task_category: "",
-    task_priority: "",
-    task_date: date + "T" + time, // Setting current IST date and time
-    task_desc: "",
-    userId: 2, // Assuming userId as 1 now
-  });
-  const initialTaskInput = {
-    task_title: "",
-    task_category: "",
-    task_priority: "",
-    task_date: date + "T" + time, // Setting current IST date and time
-    task_desc: "",
-    userId: 2, // Assuming userId as 2 now
-  };
+ const [taskInput, setTaskInput] = useState({
+   task_title: "",
+   task_category: "",
+   task_priority: "",
+   task_date: date + "T" + time,
+   task_desc: "",
+   userId: appUserContext.appUser.userId,
+ });
+
+ const initialTaskInput = {
+   task_title: "",
+   task_category: "",
+   task_priority: "",
+   task_date: date + "T" + time,
+   task_desc: "",
+   userId: appUserContext.appUser.userId,
+ };
   const categoryColors = {
     Work: "secondary", // Grey
     Study: "success", // Green
@@ -83,13 +83,15 @@ const Tasks = () => {
   const fetchTasks = useCallback(async () => {
     try {
       const response = await axios.get(
-        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?userId=${2}&search_str=${search}&count=${1}`
+        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?userId=${
+          appUserContext.appUser.userId
+        } &search_str=${search}&count=${100}`
       );
       setTasks(response.data);
     } catch (err) {
       console.log(err);
     }
-  }, [search]);
+  }, [search, appUserContext.appUser.userId]);
 
   const handleInputChange = (event) => {
     setTaskInput({
@@ -126,7 +128,7 @@ const Tasks = () => {
       return;
     }
     try {
-      const taskUrl = `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?task_title=${taskInput.task_title}&task_category=${chosenCategory}&task_priority=${taskInput.task_priority}&task_date=${taskInput.task_date}&task_desc=${taskInput.task_desc}&userId=${taskInput.userId}`;
+      const taskUrl = `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?task_title=${taskInput.task_title}&task_category=${chosenCategory}&task_priority=${taskInput.task_priority}&task_date=${taskInput.task_date}&task_desc=${taskInput.task_desc}&userId=${appUserContext.appUser.userId}`;
 
       await axios.post(taskUrl);
       fetchTasks();

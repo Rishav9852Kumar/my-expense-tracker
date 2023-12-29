@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useCallback, useEffect } from "react";
 import axios from "axios";
 import {
   Container,
@@ -21,22 +21,23 @@ const HomePage = () => {
 
   const [expenses, setExpenses] = useState([]);
   const [chosenCategory, setChosenCategory] = useState("Food"); // Default category
-  const [expenseInput, setExpenseInput] = useState({
-    expense_title: "",
-    expense_category: "",
-    expense_amount: "",
-    expense_desc: "",
-    star_marked: false,
-    userId: 1, // Assuming userId as 1 for now
-  });
-  const initialExpenseInput = {
-    expense_title: "",
-    expense_category: "",
-    expense_amount: "",
-    expense_desc: "",
-    star_marked: false,
-    userId: 1, // Assuming userId as 1 for now
-  };
+const [expenseInput, setExpenseInput] = useState({
+  expense_title: "",
+  expense_category: "",
+  expense_amount: "",
+  expense_desc: "",
+  star_marked: false,
+  userId: appUserContext.appUser.userId,
+});
+
+const initialExpenseInput = {
+  expense_title: "",
+  expense_category: "",
+  expense_amount: "",
+  expense_desc: "",
+  star_marked: false,
+  userId: appUserContext.appUser.userId,
+};
   const categoryColors = {
     "Fast Food": "danger",
     Utilities: "success",
@@ -47,16 +48,18 @@ const HomePage = () => {
     "Self Expenses": "dark",
   };
 
-  const fetchExpenses = async () => {
+  const fetchExpenses = useCallback(async () => {
     try {
       const response = await axios.get(
-        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${1}&count=${1}`
+        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${
+          appUserContext.appUser.userId
+        }&count=${100}`
       );
       setExpenses(response.data);
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [appUserContext.appUser.userId]);
 
   const handleInputChange = (event) => {
     setExpenseInput({
@@ -73,7 +76,7 @@ const HomePage = () => {
       return;
     }
     try {
-      const expenseUrl = `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?expense_title=${expenseInput.expense_title}&expense_category=${chosenCategory}&expense_amount=${expenseInput.expense_amount}&expense_desc=${expenseInput.expense_desc}&star_marked=${expenseInput.star_marked}&userId=${expenseInput.userId}`;
+      const expenseUrl = `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?expense_title=${expenseInput.expense_title}&expense_category=${chosenCategory}&expense_amount=${expenseInput.expense_amount}&expense_desc=${expenseInput.expense_desc}&star_marked=${expenseInput.star_marked}&userId=${appUserContext.appUser.userId}`;
 
       await axios.post(expenseUrl);
       fetchExpenses();
@@ -92,7 +95,7 @@ const HomePage = () => {
   };
   useEffect(() => {
     fetchExpenses();
-  }, []);
+  }, [fetchExpenses, appUserContext.appUser.userId]);
 
   //put any page behind login//
   if (!context.user?.uid) {
