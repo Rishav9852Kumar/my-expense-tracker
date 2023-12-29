@@ -23,7 +23,10 @@ import {
 import { Link } from "react-router-dom";
 
 import "firebase/auth";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/userContext";
 import { AppUserContext } from "../context/appUserContext";
@@ -53,6 +56,15 @@ const SignUp = () => {
           // Continue with sign-up
           createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+              // After registration, send email verification
+              sendEmailVerification(userCredential.user)
+                .then(() => {
+                  console.log("Verification email sent!");
+                })
+                .catch((error) => {
+                  // An error occurred. Check error.code and error.message for more information.
+                  console.log("Error sending verification email", error);
+                });
               const user = userCredential.user;
               context.setUser({ email: user.email, uid: user.uid });
               fetchUserDetails(user.email);
