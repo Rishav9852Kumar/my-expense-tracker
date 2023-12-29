@@ -25,18 +25,21 @@ import {
 import "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { UserContext } from "../context/userContext";
+import { AppUserContext } from "../context/appUserContext";
 import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const SignIn = () => {
   const context = useContext(UserContext);
-  const [email, setEmail] = useState("guest@123.gmail.com");
-  const [password, setPassword] = useState("Strong@123");
+  const appUserContext = useContext(AppUserContext);
+
+  const [email, setEmail] = useState("rishavkumaraug20005212@gmail.com");
+  const [password, setPassword] = useState("Rishav@123");
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchUserDetails = async (email) => {
     const apiUrl =
-      "createUserApi?email=" +
+      "https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/user?email=" +
       email;
 
     try {
@@ -46,16 +49,23 @@ const SignIn = () => {
 
       if (response.ok) {
         const userDetails = await response.json();
-        // const userName = userDetails.UserName;
-        // const gameUid = userDetails.UserId;
+        const userName = userDetails.UserName;
+        const userId = userDetails.UserId;
+        const registrationDate = userDetails.RegistrationDate;
 
-        // playerContext.setPlayer({
-        //   email: email,
-        //   name: userName,
-        //   gameUid: gameUid,
-        // });
+        appUserContext.setAppUser({
+          email: email,
+          name: userName,
+          userId: userId,
+          registrationDate: registrationDate,
+        });
 
-        console.log("user logged in ... " + userDetails.UserName);
+        console.log(
+          "user logged in ... " +
+            userDetails.UserName +
+            ", with user id = " +
+            userDetails.UserId
+        );
 
         setIsLoading(false);
 
@@ -78,7 +88,7 @@ const SignIn = () => {
     } catch (error) {
       console.error(error);
       setIsLoading(false);
-      toast("Error while fetching user data", {
+      toast("Error while fetching user data plese logout and log in again ", {
         type: "error",
       });
     }
@@ -101,7 +111,7 @@ const SignIn = () => {
             // Fetching user details from the API and update context
             fetchUserDetails(user.email);
             console.log("context user= " + context.user);
-          //  console.log("context player= " + playerContext.player);
+            //  console.log("context player= " + playerContext.player);
           })
           .catch((error) => {
             console.log(error);
