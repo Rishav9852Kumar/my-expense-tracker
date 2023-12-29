@@ -54,7 +54,7 @@ const initialExpenseInput = {
       const response = await axios.get(
         `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${
           appUserContext.appUser.userId
-        }&count=${100}`
+        }&count=${6}`
       );
       setExpenses(response.data);
     } catch (err) {

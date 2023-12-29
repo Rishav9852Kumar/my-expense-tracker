@@ -214,7 +214,7 @@ useEffect(() => {
                   />
                 </Form.Group>
                 <Form.Group controlId="date">
-                  <Form.Label>Task Date</Form.Label>
+                  <Form.Label>Task Date 📅 </Form.Label>
                   <Form.Control
                     type="datetime-local"
                     name="task_date"

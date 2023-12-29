@@ -22,7 +22,11 @@ import {
 } from "reactstrap";
 
 import "firebase/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { UserContext } from "../context/userContext";
 import { AppUserContext } from "../context/appUserContext";
 import { Navigate } from "react-router-dom";
@@ -56,7 +60,7 @@ const SignIn = () => {
           email: email,
           name: userName,
           userId: userId,
-          registrationDate: registrationDate
+          registrationDate: registrationDate,
         });
 
         console.log(
@@ -92,7 +96,23 @@ const SignIn = () => {
       });
     }
   };
-
+  const handleGoogleSignIn = () => {
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth(app);
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // The signed-in user info.
+        const user = result.user;
+        context.setUser({ email: user.email, uid: user.uid });
+        fetchUserDetails(user.email); // This will get the user details similar to email/password sign up
+      })
+      .catch((error) => {
+        console.error("Error during Google sign-in: ", error);
+        toast(error.message, {
+          type: "error",
+        });
+      });
+  };
   const handleSignin = () => {
     const auth = getAuth(app);
 
@@ -214,7 +234,12 @@ const SignIn = () => {
                 </CardBody>
                 <CardFooter>
                   <Button type="submit" block id="signin-button">
-                    Sign In
+                    Sign In with Mail
+                  </Button>
+                </CardFooter>
+                <CardFooter>
+                  <Button onClick={handleGoogleSignIn} block id="google-button">
+                    Sign In with Google
                   </Button>
                 </CardFooter>
               </Form>
