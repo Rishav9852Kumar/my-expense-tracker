@@ -8,7 +8,12 @@
   bottom: 0;
   right: 0; */
 }
-
+.issue-feedback-link {
+  color: red;
+}
+.issue-feedback-link:hover {
+  color: darkred;
+}
 .footer-links ul {
   list-style: none;
   padding: 0;

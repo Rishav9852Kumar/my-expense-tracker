@@ -25,6 +25,16 @@ const Footer = () => {
               <li>
                 <Link to="/user">User</Link>
               </li>
+              <li>
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLScO1BJ0s1WANbfDOCJVkNbea5fO86sOomKJMVSeeRpwT8jPCQ/viewform?pli=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="issue-feedback-link"
+                >
+                  Issue/Feedback
+                </a>
+              </li>
             </ul>
           </Col>
           <Col sm={6} className="footer-text">
