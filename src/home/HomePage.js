@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import {
   Container,
@@ -9,9 +9,16 @@ import {
   Form,
   Dropdown,
 } from "react-bootstrap";
+import { UserContext } from "../context/userContext";
+import { AppUserContext } from "../context/appUserContext";
+import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./HomePage.css";
+
 const HomePage = () => {
+  const context = useContext(UserContext);
+  const appUserContext = useContext(AppUserContext);
+
   const [expenses, setExpenses] = useState([]);
   const [chosenCategory, setChosenCategory] = useState("Food"); // Default category
   const [expenseInput, setExpenseInput] = useState({
@@ -43,7 +50,7 @@ const HomePage = () => {
   const fetchExpenses = async () => {
     try {
       const response = await axios.get(
-        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${1}&count=${100}`
+        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${1}&count=${1}`
       );
       setExpenses(response.data);
     } catch (err) {
@@ -87,6 +94,10 @@ const HomePage = () => {
     fetchExpenses();
   }, []);
 
+  //put any page behind login//
+  if (!context.user?.uid) {
+    return <Navigate to="/signin" />;
+  }
   return (
     <Container className="admin-container my-5">
       <h1 className="admin-heading custom-home-heading">Expenses</h1>

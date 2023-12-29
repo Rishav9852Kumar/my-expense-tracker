@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { UserContext } from "./context/userContext.js";
+import { AppUserContext } from "./context/appUserContext.js";
 
 import { app } from "./config/firebase-config.js";
 import {
@@ -27,35 +28,38 @@ import AboutPage from "./utils/AboutPage.js";
 import Tasks from "./tasks/task.js";
 
 function App() {
-   const [user, setUser] = useState(null);
-   const auth = getAuth(app);
+  const [user, setUser] = useState(null);
+  const [appUser, setAppUser] = useState(null);
+  const auth = getAuth(app);
 
-   useEffect(() => {
-     setPersistence(auth, browserLocalPersistence)
-       .then(() => {})
-       .catch((error) => {
-         console.error("Error setting session persistence:", error);
-       });
-   }, [auth]);
+  useEffect(() => {
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {})
+      .catch((error) => {
+        console.error("Error setting session persistence:", error);
+      });
+  }, [auth]);
 
-     return (
-       <Router>
-         <ToastContainer />
-         <UserContext.Provider value={{ user, setUser }}>
-               <Header />
-               <Routes>
-                 <Route exact path="/" element={<HomePage />} />
-                 <Route exact path="/signin" element={<SignIn />} />
-                 <Route exact path="/signup" element={<SignUp />} />
-                 <Route exact path="/user" element={<User />} />
-                 <Route exact path="/tasks" element={<Tasks/>}/>
-                 <Route exact path="/about" element={<AboutPage />} />
-                 <Route exact path="*" element={<PageNotFound />} />
-               </Routes>
-               <Footer />
-         </UserContext.Provider>
-       </Router>
-     );
+  return (
+    <Router>
+      <ToastContainer />
+      <UserContext.Provider value={{ user, setUser }}>
+        <AppUserContext.Provider value={{ appUser, setAppUser }}>
+          <Header />
+          <Routes>
+            <Route exact path="/" element={<HomePage />} />
+            <Route exact path="/signin" element={<SignIn />} />
+            <Route exact path="/signup" element={<SignUp />} />
+            <Route exact path="/user" element={<User />} />
+            <Route exact path="/tasks" element={<Tasks />} />
+            <Route exact path="/about" element={<AboutPage />} />
+            <Route exact path="*" element={<PageNotFound />} />
+          </Routes>
+          <Footer />
+        </AppUserContext.Provider>
+      </UserContext.Provider>
+    </Router>
+  );
 }
 
 export default App;

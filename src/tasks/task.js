@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import axios from "axios";
 import { MdDeleteForever } from "react-icons/md";
+import { UserContext } from "../context/userContext";
+import { AppUserContext } from "../context/appUserContext";
+import { Navigate } from "react-router-dom";
 
 import {
   Container,
@@ -17,6 +20,8 @@ import "./Tasks.css";
 import DeleteTaskModal from "../components/DeleteTaskModal.js";
 
 const Tasks = () => {
+  const context = useContext(UserContext);
+  const appUserContext = useContext(AppUserContext);
   const [tasks, setTasks] = useState([]);
   const [search, setSearch] = useState("");
   const [chosenCategory, setChosenCategory] = useState("Notes"); // Default category
@@ -78,7 +83,7 @@ const Tasks = () => {
   const fetchTasks = useCallback(async () => {
     try {
       const response = await axios.get(
-        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?userId=${2}&search_str=${search}&count=${1000}`
+        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?userId=${2}&search_str=${search}&count=${1}`
       );
       setTasks(response.data);
     } catch (err) {
@@ -139,6 +144,11 @@ const Tasks = () => {
     });
     setChosenCategory(newCategory);
   };
+
+  //put any page behind login//
+  if (!context.user?.uid) {
+    return <Navigate to="/signin" />;
+  }
 
   return (
     <Container className="admin-container my-5">
