@@ -27,7 +27,7 @@ const [expenseInput, setExpenseInput] = useState({
   expense_amount: "",
   expense_desc: "",
   star_marked: false,
-  userId: appUserContext.appUser.userId,
+  userId: null, // Initialize userId as null
 });
 
 const initialExpenseInput = {
@@ -36,7 +36,7 @@ const initialExpenseInput = {
   expense_amount: "",
   expense_desc: "",
   star_marked: false,
-  userId: appUserContext.appUser.userId,
+  userId: null, // Initialize userId as null
 };
   const categoryColors = {
     "Fast Food": "danger",
@@ -49,6 +49,7 @@ const initialExpenseInput = {
   };
 
   const fetchExpenses = useCallback(async () => {
+    if (appUserContext && appUserContext.appUser) {
     try {
       const response = await axios.get(
         `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${
@@ -59,7 +60,8 @@ const initialExpenseInput = {
     } catch (err) {
       console.log(err);
     }
-  }, [appUserContext.appUser.userId]);
+  }
+  }, [appUserContext]);
 
   const handleInputChange = (event) => {
     setExpenseInput({
@@ -94,11 +96,18 @@ const initialExpenseInput = {
     setChosenCategory(newCategory);
   };
   useEffect(() => {
-    fetchExpenses();
-  }, [fetchExpenses, appUserContext.appUser.userId]);
+    // After appUserContext.appUser becomes available, update expenseInput.userId
+    if (appUserContext && appUserContext.appUser) {
+      setExpenseInput((prevExpenseInput) => ({
+        ...prevExpenseInput,
+        userId: appUserContext.appUser.userId,
+      }));
+      fetchExpenses();
+    }
+  }, [appUserContext, fetchExpenses]);
 
   //put any page behind login//
-  if (!context.user?.uid) {
+  if (!context.user?.uid || !appUserContext.appUser?.userId) {
     return <Navigate to="/signin" />;
   }
   return (

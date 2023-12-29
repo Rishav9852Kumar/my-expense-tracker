@@ -59,7 +59,7 @@ const Tasks = () => {
    task_priority: "",
    task_date: date + "T" + time,
    task_desc: "",
-   userId: appUserContext.appUser.userId,
+   userId: null, // Initialize userId as null
  });
 
  const initialTaskInput = {
@@ -68,7 +68,7 @@ const Tasks = () => {
    task_priority: "",
    task_date: date + "T" + time,
    task_desc: "",
-   userId: appUserContext.appUser.userId,
+   userId: null, // Initialize userId as null
  };
   const categoryColors = {
     Work: "secondary", // Grey
@@ -81,6 +81,7 @@ const Tasks = () => {
   };
 
   const fetchTasks = useCallback(async () => {
+    if (appUserContext && appUserContext.appUser) {
     try {
       const response = await axios.get(
         `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/task?userId=${
@@ -91,7 +92,8 @@ const Tasks = () => {
     } catch (err) {
       console.log(err);
     }
-  }, [search, appUserContext.appUser.userId]);
+  }
+  }, [search, appUserContext]);
 
   const handleInputChange = (event) => {
     setTaskInput({
@@ -108,11 +110,16 @@ const Tasks = () => {
   //   fetchTasks();
   // }, []);
 
-  //use this when you want dynamic search effect
-  useEffect(() => {
+useEffect(() => {
+  // After appUserContext.appUser becomes available, update expenseInput.userId
+  if (appUserContext && appUserContext.appUser) {
+    setTaskInput((prevTaskInput) => ({
+      ...prevTaskInput,
+      userId: appUserContext.appUser.userId,
+    }));
     fetchTasks();
-  }, [fetchTasks]);
-
+  }
+}, [appUserContext, fetchTasks]);
   const addTask = async () => {
     const { task_title, task_priority, task_date, task_category } = taskInput;
     if (task_priority < 1 || task_priority > 10) {
@@ -148,7 +155,7 @@ const Tasks = () => {
   };
 
   //put any page behind login//
-  if (!context.user?.uid) {
+  if (!context.user?.uid || !appUserContext.appUser?.userId) {
     return <Navigate to="/signin" />;
   }
 
