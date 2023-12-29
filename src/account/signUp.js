@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-//import axios from "axios";
 import { app } from "../config/firebase-config";
 import {
   Container,
@@ -27,11 +26,11 @@ import "firebase/auth";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
 import { UserContext } from "../context/userContext";
-//import { PlayerContext } from "../context/playerContext";
+import { AppUserContext } from "../context/appUserContext";
 
 const SignUp = () => {
   const context = useContext(UserContext);
- // const playerContext = useContext(PlayerContext);
+  const appUserContext = useContext(AppUserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -73,31 +72,35 @@ const SignUp = () => {
         });
     }
   };
+
   const fetchUserDetails = async (email) => {
     setIsLoading(true);
     try {
-      // Making a PUT request
-      const putResponse = await fetch(
-        `addUserApi?email=${email}`,
+      // Making a POST request to create the user
+      const postResponse = await fetch(
+        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/user?email=${email}&UserName=${email}`,
         {
           method: "POST",
         }
       );
 
-      console.log("putResponse = ", putResponse);
+      if (postResponse.ok) {
+        const userDetails = await postResponse.json();
 
-      if (putResponse.ok) {
-        const userDetails = await putResponse.json();
-
+        console.log(
+          "userCreated =  " + email + " with UserId  = " + userDetails.UserId
+        );
         if (userDetails && userDetails.UserId) {
-          // const userName = userDetails.UserName;
-          // const gameUid = userDetails.UserId;
+          const userName = userDetails.UserName;
+          const userId = userDetails.UserId;
+          const registrationDate = userDetails.RegistrationDate;
 
-          // playerContext.setPlayer({
-          //   email: email,
-          //   name: userName,
-          //   gameUid: gameUid,
-          // });
+          appUserContext.setAppUser({
+            email: email,
+            name: userName,
+            userId: userId,
+            registrationDate: registrationDate,
+          });
 
           toast("Account Created", {
             type: "success",
@@ -107,16 +110,17 @@ const SignUp = () => {
             type: "error",
           });
         }
-      } else if (putResponse.status === 404) {
-        toast("Unable to create player account", {
+      } else if (postResponse.status === 404) {
+        toast("Unable to create user account", {
           type: "error",
         });
       }
+
       setIsLoading(false);
     } catch (error) {
-      console.error("Failed to create player account: " + error);
+      console.error("Failed to create user account: " + error);
       setIsLoading(false);
-      toast("Error while creating player account: " + error.message, {
+      toast("Error while creating user account: " + error.message, {
         type: "error",
       });
     }
