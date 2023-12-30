@@ -56,25 +56,33 @@ const SignIn = () => {
         const userId = userDetails.UserId;
         const registrationDate = userDetails.RegistrationDate;
 
-        appUserContext.setAppUser({
-          email: email,
-          name: userName,
-          userId: userId,
-          registrationDate: registrationDate,
-        });
+        if (!userName || !userId || !registrationDate) {
+          setTimeout(() => {
+            toast("No user with this email found. Please sign up first.", {
+              type: "error",
+            });
+          }, 2000);
+        } else {
+          appUserContext.setAppUser({
+            email: email,
+            name: userName,
+            userId: userId,
+            registrationDate: registrationDate,
+          });
 
-        console.log(
-          "user logged in ... " +
-            appUserContext.appUser.email +
-            ", with user id = " +
-            appUserContext.appUser.userId
-        );
+          // console.log(
+          //   "user logged in ... " +
+          //     appUserContext.appUser.email +
+          //     ", with user id = " +
+          //     appUserContext.appUser.userId
+          // );
 
-        setIsLoading(false);
+          setIsLoading(false);
 
-        toast("Account Logged in", {
-          type: "success",
-        });
+          toast("Account Logged in", {
+            type: "success",
+          });
+        }
       } else {
         console.error("Failed to fetch user data");
 

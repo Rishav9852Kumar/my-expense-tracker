@@ -21,23 +21,23 @@ const HomePage = () => {
 
   const [expenses, setExpenses] = useState([]);
   const [chosenCategory, setChosenCategory] = useState("Food"); // Default category
-const [expenseInput, setExpenseInput] = useState({
-  expense_title: "",
-  expense_category: "",
-  expense_amount: "",
-  expense_desc: "",
-  star_marked: false,
-  userId: null, // Initialize userId as null
-});
+  const [expenseInput, setExpenseInput] = useState({
+    expense_title: "",
+    expense_category: "",
+    expense_amount: "",
+    expense_desc: "",
+    star_marked: false,
+    userId: null, // Initialize userId as null
+  });
 
-const initialExpenseInput = {
-  expense_title: "",
-  expense_category: "",
-  expense_amount: "",
-  expense_desc: "",
-  star_marked: false,
-  userId: null, // Initialize userId as null
-};
+  const initialExpenseInput = {
+    expense_title: "",
+    expense_category: "",
+    expense_amount: "",
+    expense_desc: "",
+    star_marked: false,
+    userId: null, // Initialize userId as null
+  };
   const categoryColors = {
     "Fast Food": "danger",
     Utilities: "success",
@@ -50,17 +50,17 @@ const initialExpenseInput = {
 
   const fetchExpenses = useCallback(async () => {
     if (appUserContext && appUserContext.appUser) {
-    try {
-      const response = await axios.get(
-        `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${
-          appUserContext.appUser.userId
-        }&count=${6}`
-      );
-      setExpenses(response.data);
-    } catch (err) {
-      console.log(err);
+      try {
+        const response = await axios.get(
+          `https://my-expense-tracker-backend.rishavkumaraug20005212.workers.dev/event?userId=${
+            appUserContext.appUser.userId
+          }&count=${6}`
+        );
+        setExpenses(response.data);
+      } catch (err) {
+        console.log(err);
+      }
     }
-  }
   }, [appUserContext]);
 
   const handleInputChange = (event) => {
@@ -108,7 +108,7 @@ const initialExpenseInput = {
 
   //put any page behind login//
   if (!context.user?.uid || !appUserContext.appUser?.userId) {
-    return <Navigate to="/signin" />;
+    return <Navigate to="/signup" />;
   }
   return (
     <Container className="admin-container my-5">
